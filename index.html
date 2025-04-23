@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Gráficos</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Gráficos</h1>
+        
+        <form id="chartForm">
+            <div class="form-group">
+                <label for="chartType">Tipo de Gráfico:</label>
+                <select id="chartType" name="chartType" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="bar">Barras</option>
+                    <option value="line">Líneas</option>
+                    <option value="pie">Pastel</option>
+                    <option value="doughnut">Dona</option>
+                    <option value="radar">Radar</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="dataType">Datos a Graficar:</label>
+                <select id="dataType" name="dataType" required>
+                    <option value="">Seleccione datos</option>
+                    <option value="sales">Ventas por Mes</option>
+                    <option value="users">Usuarios Registrados</option>
+                    <option value="products">Productos en Inventario</option>
+                    <option value="revenue">Ingresos por Trimestre</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="chartTitle">Título del Gráfico:</label>
+                <input type="text" id="chartTitle" name="chartTitle" placeholder="Ingrese el título">
+            </div>
+            
+            <button type="submit">Generar Gráfico</button>
+        </form>
+        
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

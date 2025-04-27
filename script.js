@@ -1,106 +1,195 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('chartForm');
-    const ctx = document.getElementById('myChart').getContext('2d');
-    let myChart = null;
+    // Definir el orden de los meses
+    const monthOrder = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
     
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const chartType = document.getElementById('chartType').value;
-        const dataType = document.getElementById('dataType').value;
-        const chartTitle = document.getElementById('chartTitle').value || 'Gráfico';
-        
-        if (!chartType || !dataType) {
-            alert('Por favor seleccione el tipo de gráfico y los datos a mostrar');
-            return;
-        }
-        
-        // Obtener datos según la selección
-        const { labels, data, backgroundColor, borderColor } = getChartData(dataType);
-        
-        // Destruir el gráfico anterior si existe
-        if (myChart) {
-            myChart.destroy();
-        }
-        
-        // Crear nuevo gráfico
-        myChart = new Chart(ctx, {
-            type: chartType,
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: chartTitle,
-                    data: data,
-                    backgroundColor: backgroundColor,
-                    borderColor: borderColor,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
+    // Inicializar datos
+    let chartData = {
+        labels: [],
+        values: []
+    };
+    
+    // Obtener elementos del DOM
+    const form = document.getElementById('dataForm');
+    const monthSelect = document.getElementById('month');
+    const populationInput = document.getElementById('population');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    // Configurar el gráfico con estilo moderno
+    const ctx = document.getElementById('populationChart').getContext('2d');
+    
+    // Gradiente para el área del gráfico
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(74, 222, 128, 0.2)');
+    gradient.addColorStop(1, 'rgba(74, 222, 128, 0)');
+    
+    let populationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Población',
+                data: chartData.values,
+                backgroundColor: gradient,
+                borderColor: '#4ADE80',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#4ADE80',
+                pointBorderColor: '#0F172A',
+                pointHoverRadius: 8,
+                pointHoverBorderWidth: 3,
+                pointRadius: 5,
+                pointHitRadius: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#94A3B8'
+                    },
                     title: {
                         display: true,
-                        text: chartTitle,
-                        font: {
-                            size: 18
-                        }
-                    },
-                    legend: {
-                        position: 'top',
+                        text: 'Cantidad de Población',
+                        color: '#E2E8F0'
                     }
                 },
-                scales: chartType === 'radar' ? {} : {
-                    y: {
-                        beginAtZero: true
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#94A3B8'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Meses',
+                        color: '#E2E8F0'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#E2E8F0',
+                        font: {
+                            size: 14
+                        },
+                        boxWidth: 0,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1E293B',
+                    titleColor: '#E2E8F0',
+                    bodyColor: '#CBD5E1',
+                    borderColor: '#4ADE80',
+                    borderWidth: 1,
+                    padding: 12,
+                    usePointStyle: true,
+                    callbacks: {
+                        label: function(context) {
+                            return ` ${context.parsed.y} habitantes`;
+                        }
                     }
                 }
             }
-        });
+        }
     });
     
-    // Función para proporcionar datos según la selección
-    function getChartData(dataType) {
-        const dataSets = {
-            sales: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                data: [65, 59, 80, 81, 56, 55, 40, 72, 68, 90, 85, 95],
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)'
-            },
-            users: {
-                labels: ['2019', '2020', '2021', '2022', '2023'],
-                data: [120, 190, 300, 450, 600],
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                borderColor: 'rgba(255, 99, 132, 1)'
-            },
-            products: {
-                labels: ['Electrónicos', 'Ropa', 'Alimentos', 'Hogar', 'Juguetes'],
-                data: [300, 150, 200, 180, 120],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(153, 102, 255, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
-                ]
-            },
-            revenue: {
-                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                data: [125000, 150000, 175000, 200000],
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)'
-            }
-        };
+    // Manejar el envío del formulario
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        return dataSets[dataType] || dataSets.sales;
+        const month = monthSelect.value;
+        const population = parseInt(populationInput.value);
+        
+        // Verificar si el mes ya existe
+        const existingIndex = chartData.labels.indexOf(month);
+        if (existingIndex !== -1) {
+            // Actualizar valor existente
+            chartData.values[existingIndex] = population;
+        } else {
+            // Agregar nuevo dato
+            chartData.labels.push(month);
+            chartData.values.push(population);
+            
+            // Ordenar los meses según el orden definido
+            const sortedData = chartData.labels
+                .map((label, index) => ({
+                    label,
+                    value: chartData.values[index]
+                }))
+                .sort((a, b) => monthOrder.indexOf(a.label) - monthOrder.indexOf(b.label));
+            
+            // Actualizar los datos ordenados
+            chartData.labels = sortedData.map(item => item.label);
+            chartData.values = sortedData.map(item => item.value);
+        }
+        
+        // Actualizar el gráfico
+        updateChart();
+        
+        // Resetear el formulario
+        form.reset();
+        monthSelect.focus();
+        
+        // Efecto de confirmación
+        const submitBtn = e.submitter;
+        submitBtn.innerHTML = '<span class="btn-icon">✓</span> Datos Agregados';
+        setTimeout(() => {
+            submitBtn.innerHTML = '<span class="btn-icon">+</span> Agregar Datos';
+        }, 2000);
+    });
+    
+    // Manejar el botón de reinicio
+    resetBtn.addEventListener('click', function() {
+        chartData.labels = [];
+        chartData.values = [];
+        updateChart();
+        
+        // Efecto de confirmación
+        resetBtn.innerHTML = '<span class="btn-icon">✓</span> Gráfico Reiniciado';
+        setTimeout(() => {
+            resetBtn.innerHTML = '<span class="btn-icon">↻</span> Reiniciar';
+        }, 2000);
+    });
+    
+    // Función para actualizar el gráfico
+    function updateChart() {
+        populationChart.data.labels = chartData.labels;
+        populationChart.data.datasets[0].data = chartData.values;
+        populationChart.update();
     }
+    
+    // Cargar datos de ejemplo
+    function loadSampleData() {
+        chartData.labels = ['Enero', 'Marzo', 'Febrero']; // Desordenado a propósito
+        chartData.values = [150, 320, 240];
+        
+        // Ordenar los datos de ejemplo
+        const sortedData = chartData.labels
+            .map((label, index) => ({
+                label,
+                value: chartData.values[index]
+            }))
+            .sort((a, b) => monthOrder.indexOf(a.label) - monthOrder.indexOf(b.label));
+        
+        chartData.labels = sortedData.map(item => item.label);
+        chartData.values = sortedData.map(item => item.value);
+        
+        updateChart();
+    }
+    
+    // Cargar datos de ejemplo al inicio
+    loadSampleData();
 });

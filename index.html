@@ -3,51 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Gráficos</title>
+    <title>Gráfico Dinámico</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Generador de Gráficos</h1>
+        <div class="glass-card">
+            <h1>
+                <span class="gradient-text">Población Mensual</span>
+            </h1>
+            
+            <div class="form-container">
+                <form id="dataForm">
+                    <div class="input-group">
+                        <label for="month">Mes</label>
+                        <select id="month" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Enero">Enero</option>
+                            <option value="Febrero">Febrero</option>
+                            <option value="Marzo">Marzo</option>
+                            <option value="Abril">Abril</option>
+                            <option value="Mayo">Mayo</option>
+                            <option value="Junio">Junio</option>
+                            <option value="Julio">Julio</option>
+                            <option value="Agosto">Agosto</option>
+                            <option value="Septiembre">Septiembre</option>
+                            <option value="Octubre">Octubre</option>
+                            <option value="Noviembre">Noviembre</option>
+                            <option value="Diciembre">Diciembre</option>
+                        </select>
+                        <div class="select-icon">▼</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="population">Población</label>
+                        <input type="number" id="population" min="0" required placeholder="Ingrese cantidad">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <span class="btn-icon">+</span> Agregar Datos
+                        </button>
+                        <button type="button" id="resetBtn" class="btn-secondary">
+                            <span class="btn-icon">↻</span> Reiniciar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
         
-        <form id="chartForm">
-            <div class="form-group">
-                <label for="chartType">Tipo de Gráfico:</label>
-                <select id="chartType" name="chartType" required>
-                    <option value="">Seleccione un tipo</option>
-                    <option value="bar">Barras</option>
-                    <option value="line">Líneas</option>
-                    <option value="pie">Pastel</option>
-                    <option value="doughnut">Dona</option>
-                    <option value="radar">Radar</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="dataType">Datos a Graficar:</label>
-                <select id="dataType" name="dataType" required>
-                    <option value="">Seleccione datos</option>
-                    <option value="sales">Ventas por Mes</option>
-                    <option value="users">Usuarios Registrados</option>
-                    <option value="products">Productos en Inventario</option>
-                    <option value="revenue">Ingresos por Trimestre</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="chartTitle">Título del Gráfico:</label>
-                <input type="text" id="chartTitle" name="chartTitle" placeholder="Ingrese el título">
-            </div>
-            
-            <button type="submit">Generar Gráfico</button>
-        </form>
-        
-        <div class="chart-container">
-            <canvas id="myChart"></canvas>
+        <div class="glass-card chart-area">
+            <canvas id="populationChart"></canvas>
         </div>
     </div>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
